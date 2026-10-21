@@ -3,7 +3,7 @@
 @import '@fontsource/anton/latin-400.css';
 @import 'tailwindcss';
 
-/* `motion-on:` aktif hanya bila JS jalan & pengguna tidak memilih reduce motion (lihat BaseLayout) */
+/* `motion-on:` aktif bila JS jalan (class .motion dipasang di BaseLayout) */
 @custom-variant motion-on (&:where(.motion, .motion *));
 
 /* ---------- Design tokens (diambil dari desain feed Instagram Jastif.id) ---------- */

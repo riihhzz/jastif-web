@@ -28,19 +28,20 @@ const hasWebGL = (() => {
 // Progress chapter diteruskan ke scene 3D setelah scene selesai dimuat
 const progress = { hero: (_: number) => {}, manifesto: (_: number) => {} };
 
-if (!reducedMotion) {
-  initSmoothScroll();
-  initSplitHeadline();
-  initLineReveal();
-  initParallax();
-  initReveal();
-  initWorldBackground();
-  initHeroScroll((p) => progress.hero(p));
-  initManifesto((p) => progress.manifesto(p));
-  initPipeline();
-  initAdvantages();
-  initProcessLine();
-}
+// Efek scroll (parallax, sticky, reveal) dikendalikan langsung oleh scroll pengguna, jadi aktif
+// untuk semua. Untuk pengguna "reduce motion" hanya smooth scroll (inersia) yang dimatikan;
+// animasi loop CSS & gerakan idle 3D dimatikan di global.css dan scene 3D.
+if (!reducedMotion) initSmoothScroll();
+initSplitHeadline();
+initLineReveal();
+initParallax();
+initReveal();
+initWorldBackground();
+initHeroScroll((p) => progress.hero(p));
+initManifesto((p) => progress.manifesto(p));
+initPipeline();
+initAdvantages();
+initProcessLine();
 
 // Hitung ulang posisi trigger saat layout berubah (filter portofolio, font selesai dimuat)
 window.addEventListener('layout:change', () => ScrollTrigger.refresh());

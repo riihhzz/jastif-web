@@ -67,7 +67,8 @@ URL & base path diatur otomatis oleh workflow. Jika nanti memakai domain sendiri
 
 ## Aksesibilitas & performa
 
-- Animasi otomatis dimatikan untuk pengguna dengan pengaturan _reduce motion_
-  (section sticky tampil sebagai section biasa).
+- Efek yang digerakkan scroll (parallax, sticky, reveal) aktif untuk semua pengunjung.
+  Untuk pengaturan _reduce motion_, animasi yang berjalan sendiri (loop, inersia smooth
+  scroll, gerakan idle 3D) dimatikan. Tanpa JavaScript, section sticky tampil normal.
 - Three.js dimuat terpisah setelah halaman tampil (tidak memperlambat loading awal).
 - Render 3D berhenti otomatis saat kanvas tidak terlihat di layar.
