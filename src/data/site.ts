@@ -11,7 +11,7 @@ export const site = {
   },
   instagram: {
     handle: 'jastif.id',
-    url: 'https://instagram.com/jastif.id',
+    url: 'https://www.instagram.com/jastif.id/',
   },
 } as const;
 
