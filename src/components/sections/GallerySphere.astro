@@ -1,0 +1,55 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Sticker from '@/components/ui/Sticker.astro';
+import { galleryImages, galleryPlaceholderLabels } from '@/data/gallery';
+---
+
+<!--
+  Bola galeri 3D: puluhan tile foto tersusun di permukaan bola (scripts/three/gallery-sphere.ts).
+  Selama discroll bola tumbuh dari balik headline, berputar, lalu mendekat ke kamera.
+  Bola juga bisa diseret dengan mouse / jari.
+-->
+<Sticker
+  id="galeri"
+  length={320}
+  data-gallery
+  class="bg-[#04102a]"
+  trackClass="grid min-h-svh place-items-center overflow-hidden"
+>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_45%_at_50%_50%,rgb(43_149_255/0.18),transparent_70%)]"
+  ></div>
+
+  <canvas
+    id="gallery-canvas"
+    data-images={JSON.stringify(galleryImages)}
+    data-labels={JSON.stringify(galleryPlaceholderLabels)}
+    class="absolute inset-0 size-full cursor-grab touch-pan-y active:cursor-grabbing"
+    aria-label="Bola galeri 3D berisi contoh konten visual. Seret untuk memutar."
+    role="img"
+  ></canvas>
+
+  <h2
+    class="pointer-events-none relative text-center text-mega text-[clamp(3.5rem,12vw,11rem)] [text-shadow:0_10px_60px_rgb(4_16_42/0.8)]"
+    data-gallery-title
+  >
+    <span class="block">Satu Aset</span>
+    <span class="block text-brand-orange-500">Ratusan Konten</span>
+  </h2>
+
+  <div
+    class="absolute inset-x-0 bottom-0 flex flex-col items-center gap-4 bg-gradient-to-t from-[#04102a] via-[#04102a]/80 to-transparent px-5 pt-24 pb-10 text-center"
+    data-gallery-caption
+  >
+    <p class="max-w-md text-sm text-white/80 sm:text-base">
+      Dari satu model 3D lahir foto katalog, konten Reels, banner promo, dan banyak lagi.{' '}
+      <span class="hidden sm:inline">Seret bola untuk memutar.</span>
+    </p>
+    <Button href="#harga" variant="glass">
+      Lihat Paket
+      <Icon name="arrow" class="size-4" />
+    </Button>
+  </div>
+</Sticker>

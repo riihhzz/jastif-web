@@ -1,21 +1,51 @@
 ---
 import Blob from '@/components/ui/Blob.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
-import Icon from '@/components/ui/Icon.astro';
+import Sticker from '@/components/ui/Sticker.astro';
 
 // Taruh model hasil export Blender (glTF Binary .glb) di public/models/product.glb.
 // Jika file belum ada, viewer otomatis menampilkan model logo Jastif.id.
 const modelPath = 'models/product.glb';
-const points = [
-  'Putar 360° dengan mouse atau jari',
-  'Zoom untuk melihat detail material',
-  'Aset yang sama dipakai untuk foto & video',
+
+// Langkah yang menyala bergantian saat model berputar mengikuti scroll
+const steps = [
+  { title: 'Tampak Depan', text: 'Label dan identitas brand terlihat jelas dan rapi.' },
+  { title: 'Sudut Perspektif', text: 'Bentuk dan dimensi produk terasa lebih nyata.' },
+  { title: 'Putar 360°', text: 'Seret model untuk melihat setiap sisi. Coba sendiri!' },
+];
+
+// Chip kaca melayang di sekitar bingkai; `depth` menentukan seberapa jauh bergerak (parallax)
+const chips = [
+  { label: 'Material', class: '-top-5 left-6 lg:-left-10', depth: 1.4 },
+  { label: 'Lighting', class: 'top-1/3 -right-3 lg:-right-12', depth: -1 },
+  { label: '360°', class: '-bottom-5 left-1/4 lg:-left-6', depth: 0.8 },
 ];
 ---
 
-<section class="relative isolate overflow-hidden bg-brand-blue-950 py-24 lg:py-32">
-  <Blob color="blue" speed={0.35} class="-top-20 right-0 size-[34rem] opacity-50" />
-  <Blob color="orange" speed={0.2} class="bottom-0 -left-32 size-[24rem] opacity-30" />
+<!--
+  Desktop: section sticky; selama discroll model berputar seperti turntable, bingkai miring
+  lalu tegak, teks "360°" raksasa bergeser, chip melayang dengan kedalaman berbeda, dan
+  langkah di kiri menyala bergantian (lihat initViewer di scroll-scenes.ts).
+  HP: section biasa dengan rotasi model & parallax chip mengikuti scroll.
+-->
+<Sticker
+  id="viewer"
+  length={300}
+  lgOnly
+  data-viewer
+  class="bg-brand-blue-950"
+  trackClass="isolate flex items-center overflow-hidden py-24 lg:py-0"
+>
+  <Blob color="blue" speed={0.35} class="-top-20 right-0 -z-10 size-[34rem] opacity-50" />
+  <Blob color="orange" speed={0.2} class="bottom-0 -left-32 -z-10 size-[24rem] opacity-30" />
+
+  <p
+    aria-hidden="true"
+    class="pointer-events-none absolute top-1/2 left-0 -z-10 -translate-y-1/2 text-mega text-[38vw] whitespace-nowrap text-white/[0.05] lg:text-[30vw]"
+    data-viewer-bigtext
+  >
+    360° · 360°
+  </p>
 
   <div class="container-page grid items-center gap-12 lg:grid-cols-[1fr_1.2fr]">
     <div>
@@ -23,35 +53,55 @@ const points = [
         Lihat Produk dari <span class="text-accent">Segala Sudut</span>
         <Fragment slot="description">
           Inilah kelebihan aset 3D: produk bisa diputar, didekatkan, dan diatur ulang kapan saja
-          untuk kebutuhan konten berikutnya. Coba sendiri!
+          untuk kebutuhan konten berikutnya.
         </Fragment>
       </SectionHeading>
-      <ul class="mt-8 space-y-3">
-        {points.map((p) => (
-          <li data-reveal class="flex items-center gap-3 text-white/85">
-            <span class="grid size-7 place-items-center rounded-full bg-brand-orange-500">
-              <Icon name="check" class="size-3.5" />
+
+      <ol class="mt-8 space-y-2">
+        {steps.map((step, i) => (
+          <li
+            data-viewer-step
+            class="group relative rounded-2xl py-3 pr-4 pl-14 transition duration-500 lg:opacity-35 lg:data-[active]:bg-white/5 lg:data-[active]:opacity-100"
+          >
+            <span class="absolute top-3 left-3 grid size-8 place-items-center rounded-full bg-white/10 font-display text-sm font-extrabold transition duration-500 group-data-[active]:bg-brand-orange-500">
+              {i + 1}
             </span>
-            {p}
+            <h3 class="font-display text-lg font-extrabold">{step.title}</h3>
+            <p class="mt-0.5 text-sm text-white/70">{step.text}</p>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
 
-    <div
-      data-reveal
-      class="glass relative aspect-square overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-blue-500/40 to-brand-orange-500/20"
-    >
-      <canvas
-        id="viewer-canvas"
-        data-model={modelPath}
-        class="size-full cursor-grab touch-none active:cursor-grabbing"
-        aria-label="Viewer 3D interaktif: seret untuk memutar model"
-        role="img"
-      ></canvas>
-      <p class="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/30 px-4 py-1.5 text-xs font-semibold whitespace-nowrap text-white/80 backdrop-blur">
-        Seret untuk memutar · Ctrl+scroll / cubit untuk zoom
-      </p>
+    <div class="relative [perspective:1400px]">
+      <div
+        data-viewer-frame
+        class="glass relative aspect-square overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-blue-500/40 to-brand-orange-500/20 will-change-transform lg:max-h-[78svh]"
+      >
+        <canvas
+          id="viewer-canvas"
+          data-model={modelPath}
+          class="size-full cursor-grab touch-pan-y active:cursor-grabbing"
+          aria-label="Viewer 3D interaktif: seret untuk memutar model"
+          role="img"
+        ></canvas>
+        <p class="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/30 px-4 py-1.5 text-xs font-semibold whitespace-nowrap text-white/80 backdrop-blur">
+          Seret untuk memutar · Ctrl+scroll / cubit untuk zoom
+        </p>
+      </div>
+
+      {chips.map((chip) => (
+        <span
+          data-viewer-chip
+          data-depth={chip.depth}
+          class:list={[
+            'glass pointer-events-none absolute z-10 rounded-full px-4 py-2 font-display text-sm font-bold shadow-xl',
+            chip.class,
+          ]}
+        >
+          {chip.label}
+        </span>
+      ))}
     </div>
   </div>
-</section>
+</Sticker>

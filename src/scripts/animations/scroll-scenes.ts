@@ -256,6 +256,90 @@ export function initPipeline(): void {
   });
 }
 
+/**
+ * Viewer "Segala Sudut". Desktop: section sticky, bingkai miring → tegak, teks "360°" bergeser,
+ * chip melayang dengan kedalaman berbeda, langkah menyala bergantian. HP: parallax biasa.
+ * `onProgress` memutar model 3D seperti turntable.
+ */
+export function initViewer(onProgress?: (p: number) => void): void {
+  const section = document.querySelector<HTMLElement>('[data-viewer]');
+  if (!section) return;
+  const frame = section.querySelector('[data-viewer-frame]');
+  const bigText = section.querySelector('[data-viewer-bigtext]');
+  const chips = gsap.utils.toArray<HTMLElement>('[data-viewer-chip]', section);
+  const steps = gsap.utils.toArray<HTMLElement>('[data-viewer-step]', section);
+
+  const setStep = (p: number) => {
+    const active = Math.min(steps.length - 1, Math.floor(p * steps.length));
+    steps.forEach((s, i) => s.toggleAttribute('data-active', i === active));
+  };
+
+  const build = (start: string, end: string, desktop: boolean) => {
+    const tl = gsap.timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: {
+        trigger: section,
+        start,
+        end,
+        scrub: 0.6,
+        onUpdate: (self) => {
+          onProgress?.(self.progress);
+          if (desktop) setStep(self.progress);
+        },
+      },
+    });
+    tl.fromTo(bigText, { xPercent: 10 }, { xPercent: -45, duration: 1 }, 0);
+    chips.forEach((chip) => {
+      const depth = parseFloat(chip.dataset.depth ?? '1');
+      tl.fromTo(chip, { y: 140 * depth }, { y: -140 * depth, duration: 1 }, 0);
+    });
+    if (desktop) {
+      tl.fromTo(
+        frame,
+        { rotationX: 16, rotationY: -18, scale: 0.86 },
+        { rotationX: 0, rotationY: 0, scale: 1, duration: 0.35, ease: 'power2.out' },
+        0,
+      ).to(frame, { rotationY: 8, rotationX: -4, duration: 0.65 }, 0.35);
+    }
+  };
+
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 1024px)', () => build('top top', 'bottom bottom', true));
+  mm.add('(max-width: 1023px)', () => build('top bottom', 'bottom top', false));
+}
+
+/** Bola galeri 3D: headline mengecil & memudar saat bola tumbuh, keterangan muncul di akhir. */
+export function initGallery(onProgress?: (p: number) => void): void {
+  const section = document.querySelector<HTMLElement>('[data-gallery]');
+  if (!section) return;
+
+  gsap.set('[data-gallery-caption]', { opacity: 0, y: 40 });
+  gsap
+    .timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.6,
+        onUpdate: (self) => onProgress?.(self.progress),
+      },
+    })
+    .fromTo(
+      '[data-gallery-title]',
+      { scale: 1, opacity: 1 },
+      { scale: 0.7, opacity: 0, filter: 'blur(12px)', duration: 0.35 },
+      0.05,
+    )
+    .fromTo(
+      '[data-gallery-caption]',
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' },
+      0.7,
+    )
+    .to({}, { duration: 0.1 });
+}
+
 /** Garis progres pada section "Cara Pesan". */
 export function initProcessLine(): void {
   const line = document.querySelector('[data-process-line]');

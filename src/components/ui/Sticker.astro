@@ -2,11 +2,13 @@
 /**
  * Section "sticker": wrapper setinggi `length` (dalam lvh) dengan isi yang menempel (sticky)
  * selama wrapper discroll. Animasi di dalamnya dikendalikan progress scroll wrapper.
- * Tanpa motion (reduce motion / tanpa JS) tampil sebagai section biasa.
+ * Tanpa JavaScript tampil sebagai section biasa.
  */
 interface Props {
   id?: string;
   length?: number;
+  /** Sticky hanya di desktop (≥1024px); di HP tampil sebagai section biasa. */
+  lgOnly?: boolean;
   class?: string;
   trackClass?: string;
   /** Warna latar "world" saat section ini aktif (untuk section transparan). */
@@ -14,13 +16,14 @@ interface Props {
   [key: `data-${string}`]: string | boolean | undefined;
 }
 
-const { id, length = 300, class: className, trackClass, bg, ...rest } = Astro.props;
+const { id, length = 300, lgOnly = false, class: className, trackClass, bg, ...rest } = Astro.props;
 ---
 
 <section
   id={id}
   data-sticker
   data-bg={bg}
+  data-lg={lgOnly || undefined}
   class:list={['sticker relative', className]}
   style={`--len: ${length}lvh`}
   {...rest}

@@ -24,11 +24,19 @@ function normalize(object: THREE.Object3D, size = 4.2): void {
   object.position.sub(centered.getCenter(new THREE.Vector3()));
 }
 
+export interface ProductViewer {
+  /** Progress scroll section 0–1: model berputar seperti turntable. */
+  setProgress: (p: number) => void;
+}
+
 /**
  * Viewer 3D interaktif (orbit + zoom). Memuat public/<data-model> jika ada,
- * jika tidak menampilkan logo 3D Jastif.id.
+ * jika tidak menampilkan logo 3D Jastif.id. Selain diseret, model berputar mengikuti scroll.
  */
-export async function createProductViewer(canvas: HTMLCanvasElement, reducedMotion: boolean) {
+export async function createProductViewer(
+  canvas: HTMLCanvasElement,
+  reducedMotion: boolean,
+): Promise<ProductViewer> {
   const stage = createStage(canvas, 32);
   const { scene, camera, renderer } = stage;
   camera.position.set(8.5, 5, 11);
@@ -38,8 +46,17 @@ export async function createProductViewer(canvas: HTMLCanvasElement, reducedMoti
   controls.enablePan = false;
   controls.minDistance = 6;
   controls.maxDistance = 18;
-  controls.autoRotate = !reducedMotion;
-  controls.autoRotateSpeed = 1.2;
+  // OrbitControls memblokir semua gesture sentuh; izinkan scroll vertikal halaman di HP
+  renderer.domElement.style.touchAction = 'pan-y';
+
+  // Model ditaruh di "turntable" yang diputar oleh progress scroll
+  const turntable = new THREE.Group();
+  scene.add(turntable);
+  let progress = 0;
+  stage.onFrame((dt) => {
+    const target = -0.6 + progress * Math.PI * 2;
+    turntable.rotation.y = THREE.MathUtils.damp(turntable.rotation.y, target, 4, dt);
+  });
   // Biarkan halaman tetap bisa discroll dengan wheel; zoom hanya saat Ctrl/pinch
   controls.enableZoom = false;
   canvas.addEventListener(
@@ -72,10 +89,10 @@ export async function createProductViewer(canvas: HTMLCanvasElement, reducedMoti
   }
 
   if (loaded) {
-    scene.add(loaded);
+    turntable.add(loaded);
   } else {
     const { group, cube, cubeBaseY } = createLogoModel();
-    scene.add(group);
+    turntable.add(group);
     if (!reducedMotion) {
       stage.onFrame((_, t) => {
         cube.position.y = cubeBaseY + 0.1 + Math.sin(t * 1.6) * 0.12;
@@ -84,5 +101,5 @@ export async function createProductViewer(canvas: HTMLCanvasElement, reducedMoti
   }
 
   stage.onFrame(() => controls.update());
-  return stage;
+  return { setProgress: (p) => (progress = p) };
 }

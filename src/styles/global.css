@@ -111,14 +111,26 @@
   position: relative;
   min-height: 100svh;
 }
-.motion .sticker {
+.motion .sticker:not([data-lg]) {
   height: var(--len, 300lvh);
 }
-.motion .sticker-track {
+.motion .sticker:not([data-lg]) > .sticker-track {
   position: sticky;
   top: 0;
   height: 100svh;
   overflow: hidden;
+}
+/* Varian [data-lg]: sticky hanya di desktop (isinya terlalu tinggi untuk satu layar HP) */
+@media (min-width: 1024px) {
+  .motion .sticker[data-lg] {
+    height: var(--len, 300lvh);
+  }
+  .motion .sticker[data-lg] > .sticker-track {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
