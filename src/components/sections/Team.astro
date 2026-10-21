@@ -1,0 +1,54 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { team } from '@/data/team';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const initials = (name: string) =>
+  name
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('');
+---
+
+<section class="relative bg-white py-24 text-ink lg:py-32">
+  <div class="container-page">
+    <SectionHeading eyebrow="Tim Kami" tone="dark">
+      Dikerjakan oleh <span class="text-brand-blue-600">Kreator Multimedia</span>
+      <Fragment slot="description">
+        Kami mahasiswa Pendidikan Multimedia UPI Kampus Cibiru yang menggabungkan keahlian 3D,
+        animasi, editing, dan digital marketing untuk membantu UMKM tampil lebih menarik.
+      </Fragment>
+    </SectionHeading>
+
+    <ul class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {team.map((m, i) => (
+        <li
+          data-reveal
+          class="group rounded-[1.75rem] bg-brand-blue-50 p-6 transition hover:-translate-y-1 hover:bg-brand-blue-100"
+        >
+          {m.photo ? (
+            <img
+              src={`${base}/${m.photo}`}
+              alt={m.name}
+              loading="lazy"
+              class="aspect-square w-full rounded-2xl object-cover"
+            />
+          ) : (
+            <div
+              class:list={[
+                'grid aspect-square w-full place-items-center rounded-2xl font-display text-5xl font-black text-white',
+                i % 2 ? 'bg-brand-orange-500' : 'bg-brand-blue-500',
+              ]}
+              aria-hidden="true"
+            >
+              {initials(m.name)}
+            </div>
+          )}
+          <h3 class="mt-5 text-lg font-extrabold">{m.name}</h3>
+          <p class="mt-1 text-sm text-ink/60">{m.role}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

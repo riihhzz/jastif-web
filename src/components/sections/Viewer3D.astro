@@ -1,0 +1,57 @@
+---
+import Blob from '@/components/ui/Blob.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+// Taruh model hasil export Blender (glTF Binary .glb) di public/models/product.glb.
+// Jika file belum ada, viewer otomatis menampilkan model logo Jastif.id.
+const modelPath = 'models/product.glb';
+const points = [
+  'Putar 360° dengan mouse atau jari',
+  'Zoom untuk melihat detail material',
+  'Aset yang sama dipakai untuk foto & video',
+];
+---
+
+<section class="relative isolate overflow-hidden bg-brand-blue-950 py-24 lg:py-32">
+  <Blob color="blue" speed={0.35} class="-top-20 right-0 size-[34rem] opacity-50" />
+  <Blob color="orange" speed={0.2} class="bottom-0 -left-32 size-[24rem] opacity-30" />
+
+  <div class="container-page grid items-center gap-12 lg:grid-cols-[1fr_1.2fr]">
+    <div>
+      <SectionHeading eyebrow="Interaktif">
+        Lihat Produk dari <span class="text-accent">Segala Sudut</span>
+        <Fragment slot="description">
+          Inilah kelebihan aset 3D: produk bisa diputar, didekatkan, dan diatur ulang kapan saja
+          untuk kebutuhan konten berikutnya. Coba sendiri!
+        </Fragment>
+      </SectionHeading>
+      <ul class="mt-8 space-y-3">
+        {points.map((p) => (
+          <li data-reveal class="flex items-center gap-3 text-white/85">
+            <span class="grid size-7 place-items-center rounded-full bg-brand-orange-500">
+              <Icon name="check" class="size-3.5" />
+            </span>
+            {p}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div
+      data-reveal
+      class="glass relative aspect-square overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-blue-500/40 to-brand-orange-500/20"
+    >
+      <canvas
+        id="viewer-canvas"
+        data-model={modelPath}
+        class="size-full cursor-grab touch-none active:cursor-grabbing"
+        aria-label="Viewer 3D interaktif: seret untuk memutar model"
+        role="img"
+      ></canvas>
+      <p class="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/30 px-4 py-1.5 text-xs font-semibold whitespace-nowrap text-white/80 backdrop-blur">
+        Seret untuk memutar · Ctrl+scroll / cubit untuk zoom
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { defaultMessage, waLink } from '@/scripts/utils/whatsapp';
+---
+
+<a
+  href={waLink(defaultMessage)}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Chat WhatsApp"
+  class="fixed right-5 bottom-5 z-40 grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/25 transition duration-300 ease-out-expo hover:scale-110 sm:right-8 sm:bottom-8"
+>
+  <span class="absolute inset-0 animate-ping rounded-full bg-[#25D366] opacity-30 motion-reduce:hidden"></span>
+  <Icon name="whatsapp" class="relative size-7" />
+</a>

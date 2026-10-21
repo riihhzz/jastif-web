@@ -1,0 +1,132 @@
+@import '@fontsource-variable/montserrat';
+@import '@fontsource-variable/plus-jakarta-sans';
+@import '@fontsource/anton/latin-400.css';
+@import 'tailwindcss';
+
+/* `motion-on:` aktif hanya bila JS jalan & pengguna tidak memilih reduce motion (lihat BaseLayout) */
+@custom-variant motion-on (&:where(.motion, .motion *));
+
+/* ---------- Design tokens (diambil dari desain feed Instagram Jastif.id) ---------- */
+@theme {
+  --font-display: 'Montserrat Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  /* Condensed untuk headline raksasa */
+  --font-mega: 'Anton', 'Impact', ui-sans-serif, sans-serif;
+
+  --color-brand-blue-50: #eef6ff;
+  --color-brand-blue-100: #d9ebff;
+  --color-brand-blue-300: #7cc0ff;
+  --color-brand-blue-400: #4aa8ff;
+  --color-brand-blue-500: #2b95ff;
+  --color-brand-blue-600: #0a74f0;
+  --color-brand-blue-700: #0656c4;
+  --color-brand-blue-900: #0a2552;
+  --color-brand-blue-950: #061633;
+
+  --color-brand-orange-300: #ffb36b;
+  --color-brand-orange-400: #ff9640;
+  --color-brand-orange-500: #ff7a1a;
+  --color-brand-orange-600: #f05f05;
+
+  --color-ink: #0b1630;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes float {
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  html.lenis {
+    scroll-behavior: auto;
+  }
+  body {
+    @apply bg-brand-blue-950 font-sans text-white antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight text-balance;
+  }
+  ::selection {
+    @apply bg-brand-orange-500 text-white;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-orange-400;
+  }
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+}
+
+/* ---------- Komponen yang dipakai berulang ---------- */
+@utility glass {
+  @apply border border-white/25 bg-white/10 shadow-[0_8px_32px_rgb(6_22_51/0.25)] backdrop-blur-xl;
+}
+
+@utility text-accent {
+  @apply text-brand-orange-500;
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+}
+
+@utility text-mega {
+  @apply font-mega leading-[0.88] font-normal tracking-normal uppercase;
+}
+
+/* Elemen yang dianimasikan GSAP disembunyikan dulu hanya jika motion aktif */
+.motion [data-reveal] {
+  opacity: 0;
+}
+
+/*
+ * "Sticker": wrapper tinggi (--len) + track sticky setinggi layar.
+ * Progress scroll di dalam wrapper menggerakkan animasi (lihat scroll-scenes.ts).
+ * Tanpa motion, section tampil normal tanpa sticky.
+ */
+.sticker-track {
+  position: relative;
+  min-height: 100svh;
+}
+.motion .sticker {
+  height: var(--len, 300lvh);
+}
+.motion .sticker-track {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

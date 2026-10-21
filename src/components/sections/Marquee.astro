@@ -1,0 +1,26 @@
+---
+const items = [
+  '3D Product Visual',
+  'Rendering',
+  'Konten Reels & TikTok',
+  'Foto Katalog',
+  'Materi Promosi',
+  'Aset 3D Pakai Ulang',
+];
+// Diduplikasi agar animasi translateX(-50%) bisa berulang mulus
+const loop = [...items, ...items];
+---
+
+<div
+  class="relative z-10 -my-6 -rotate-2 overflow-hidden bg-brand-orange-500 py-4 shadow-2xl shadow-black/20"
+  aria-hidden="true"
+>
+  <div class="animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]">
+    {loop.map((item) => (
+      <span class="flex items-center gap-10 text-mega text-3xl whitespace-nowrap sm:text-4xl">
+        {item}
+        <span class="size-3 rotate-45 rounded-sm bg-white/80" />
+      </span>
+    ))}
+  </div>
+</div>

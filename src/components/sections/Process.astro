@@ -1,0 +1,41 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+
+const steps = [
+  { title: 'Konsultasi', text: 'Ceritakan produk dan kebutuhan kontenmu lewat WhatsApp.' },
+  { title: 'Kirim Bahan', text: 'Foto produk, label, logo, dan referensi gaya visual.' },
+  { title: 'Konfirmasi Konsep', text: 'Kami cek bahan dan sepakati konsep visualnya.' },
+  { title: 'Preview & Revisi', text: 'Kamu lihat hasil awal dan dapat 1 kali revisi ringan.' },
+  { title: 'Hasil Dikirim', text: 'File JPG/PNG resolusi tinggi siap diunggah.' },
+];
+---
+
+<section class="relative bg-white py-24 text-ink lg:py-32">
+  <div class="container-page">
+    <SectionHeading eyebrow="Cara Pesan" tone="dark" align="center">
+      5 Langkah <span class="text-brand-orange-500">Mudah</span>, Semua Online
+    </SectionHeading>
+
+    <div class="relative mt-16" data-process>
+      <div
+        aria-hidden="true"
+        class="absolute top-7 right-[10%] left-[10%] hidden h-0.5 bg-brand-blue-100 md:block"
+      >
+        <div class="h-full origin-left scale-x-0 bg-brand-blue-500" data-process-line></div>
+      </div>
+      <ol class="relative grid gap-8 md:grid-cols-5 md:gap-4">
+        {steps.map((s, i) => (
+          <li data-reveal class="relative flex gap-5 md:flex-col md:items-center md:text-center">
+            <span class="relative z-10 grid size-14 shrink-0 place-items-center rounded-2xl bg-brand-blue-600 font-display text-xl font-extrabold text-white shadow-lg shadow-brand-blue-600/30">
+              {i + 1}
+            </span>
+            <div>
+              <h3 class="text-lg font-extrabold md:mt-5">{s.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-ink/60">{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>

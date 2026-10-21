@@ -1,0 +1,185 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { angles, packages } from '@/data/services';
+
+const productTypes = [
+  'Minuman',
+  'Makanan kemasan',
+  'Skincare / beauty',
+  'Produk retail',
+  'Lainnya',
+];
+const field =
+  'w-full rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 transition focus:border-brand-orange-400 focus:bg-white/10 focus:outline-none';
+const label = 'mb-2 block font-display text-sm font-bold text-white/85';
+---
+
+<section id="pesan" class="relative bg-brand-blue-950 py-24 lg:py-32">
+  <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.3fr]">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <SectionHeading eyebrow="Pesan Sekarang">
+        Susun Pesananmu, <span class="text-accent">Kirim via WhatsApp</span>
+        <Fragment slot="description">
+          Isi form singkat ini, pesan WhatsApp akan tersusun otomatis. Tinggal kirim, tim kami
+          segera membalas.
+        </Fragment>
+      </SectionHeading>
+
+      <div class="glass mt-8 rounded-3xl p-5" data-reveal>
+        <p class="font-display text-xs font-bold tracking-widest text-white/50 uppercase">
+          Pratinjau pesan
+        </p>
+        <pre
+          class="mt-3 max-h-64 overflow-auto font-sans text-sm leading-relaxed whitespace-pre-wrap text-white/85"
+          data-order-preview
+          aria-live="polite"
+        ></pre>
+      </div>
+    </div>
+
+    <form class="glass space-y-6 rounded-[2rem] p-6 sm:p-10" data-order-form data-reveal novalidate>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div>
+          <label for="o-name" class={label}>
+            Nama kamu
+          </label>
+          <input
+            id="o-name"
+            name="name"
+            required
+            autocomplete="name"
+            placeholder="Mis. Rina"
+            class={field}
+          />
+        </div>
+        <div>
+          <label for="o-brand" class={label}>
+            Nama usaha / brand
+          </label>
+          <input id="o-brand" name="brand" placeholder="Mis. SegarKu" class={field} />
+        </div>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div>
+          <label for="o-type" class={label}>
+            Jenis produk
+          </label>
+          <select id="o-type" name="type" class:list={[field, '[&>option]:text-ink']}>
+            {productTypes.map((t) => (
+              <option>{t}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label for="o-qty" class={label}>
+            Jumlah produk
+          </label>
+          <input id="o-qty" name="qty" type="number" min="1" max="50" value="1" class={field} />
+        </div>
+      </div>
+
+      <fieldset>
+        <legend class={label}>Paket</legend>
+        <div class="grid gap-3 sm:grid-cols-3">
+          {packages.map((pkg, i) => (
+            <label class="cursor-pointer">
+              <input
+                type="radio"
+                name="package"
+                value={pkg.name}
+                checked={i === 0}
+                class="peer sr-only"
+              />
+              <span class="block h-full rounded-2xl border border-white/15 p-4 transition peer-checked:border-brand-orange-400 peer-checked:bg-brand-orange-500/15 peer-focus-visible:outline-2 peer-focus-visible:outline-brand-orange-400 hover:bg-white/5">
+                <span class="block font-display text-sm font-bold">{pkg.name}</span>
+                <span class="mt-1 block text-xs text-white/60">{pkg.price}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class={label}>Sudut render yang diinginkan</legend>
+        <div class="flex flex-wrap gap-2">
+          {angles.map((a) => (
+            <label class="cursor-pointer">
+              <input type="checkbox" name="angles" value={a.label} checked class="peer sr-only" />
+              <span class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold transition peer-checked:border-brand-blue-400 peer-checked:bg-brand-blue-500/30 peer-focus-visible:outline-2 peer-focus-visible:outline-brand-orange-400">
+                {a.label}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="o-notes" class={label}>
+          Catatan / referensi gaya <span class="font-normal text-white/50">(opsional)</span>
+        </label>
+        <textarea
+          id="o-notes"
+          name="notes"
+          rows="3"
+          placeholder="Mis. nuansa segar, ada percikan air dan es batu"
+          class={field}
+        ></textarea>
+      </div>
+
+      <p class="hidden text-sm font-semibold text-brand-orange-300" data-order-error role="alert">
+        Isi nama kamu dulu ya.
+      </p>
+
+      <button
+        type="submit"
+        class="flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-7 py-4 font-display font-bold text-white shadow-lg shadow-black/20 transition duration-300 ease-out-expo hover:-translate-y-0.5 hover:brightness-105"
+      >
+        <Icon name="whatsapp" />
+        Kirim Pesanan via WhatsApp
+      </button>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { site } from '@/data/site';
+  import { waLink } from '@/scripts/utils/whatsapp';
+
+  const form = document.querySelector<HTMLFormElement>('[data-order-form]')!;
+  const preview = document.querySelector<HTMLElement>('[data-order-preview]')!;
+  const error = document.querySelector<HTMLElement>('[data-order-error]')!;
+
+  const compose = (): string => {
+    const data = new FormData(form);
+    const val = (key: string) => String(data.get(key) ?? '').trim();
+    const angles = data.getAll('angles').join(', ') || '-';
+    return [
+      `Halo ${site.name}! Saya ingin memesan visual produk 3D.`,
+      '',
+      `Nama: ${val('name') || '-'}`,
+      `Brand: ${val('brand') || '-'}`,
+      `Jenis produk: ${val('type')}`,
+      `Jumlah produk: ${val('qty') || '1'}`,
+      `Paket: ${val('package')}`,
+      `Sudut render: ${angles}`,
+      ...(val('notes') ? ['', `Catatan: ${val('notes')}`] : []),
+      '',
+      'Foto produk akan saya kirim setelah ini. Terima kasih!',
+    ].join('\n');
+  };
+
+  const update = () => (preview.textContent = compose());
+  form.addEventListener('input', update);
+  update();
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = form.elements.namedItem('name') as HTMLInputElement;
+    const invalid = !name.value.trim();
+    error.classList.toggle('hidden', !invalid);
+    if (invalid) return name.focus();
+    window.open(waLink(compose()), '_blank', 'noopener');
+  });
+</script>

@@ -1,0 +1,64 @@
+---
+import ImageSlot from '@/components/ui/ImageSlot.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { angles } from '@/data/services';
+import { site } from '@/data/site';
+
+// Tiap kartu meniru format postingan Instagram Jastif.id (rasio 4:5)
+const cardStyles = [
+  { bg: 'bg-brand-blue-500', blob: 'bg-brand-orange-500', speed: 0.06 },
+  { bg: 'bg-brand-orange-500', blob: 'bg-brand-blue-500', speed: -0.08 },
+  { bg: 'bg-brand-blue-500', blob: 'bg-brand-orange-400', speed: 0.1 },
+];
+---
+
+<section id="layanan" class="relative overflow-hidden bg-brand-blue-50 py-24 text-ink lg:py-32">
+  <div class="container-page">
+    <SectionHeading eyebrow="Yang Kamu Dapatkan" tone="dark">
+      3 Sudut Render, <span class="text-brand-blue-600">Siap Posting</span>
+      <Fragment slot="description">
+        Setiap paket 3D Product Visual berisi tiga hasil render dengan sudut berbeda, langsung bisa
+        dipakai untuk feed, katalog, maupun marketplace.
+      </Fragment>
+    </SectionHeading>
+
+    <div class="mt-14 grid gap-6 md:grid-cols-3 lg:mt-20">
+      {angles.map((angle, i) => {
+        const style = cardStyles[i % cardStyles.length]!;
+        return (
+          <article
+            data-reveal
+            data-speed={style.speed}
+            class:list={[
+              'relative isolate flex aspect-[4/5] flex-col overflow-hidden rounded-[1.75rem] p-5 text-white shadow-2xl shadow-brand-blue-900/20',
+              style.bg,
+              i === 1 && 'md:translate-y-12',
+            ]}
+          >
+            <div
+              aria-hidden="true"
+              class:list={[
+                'absolute -top-1/4 -left-1/4 -z-10 size-3/4 rounded-full opacity-90 blur-3xl',
+                style.blob,
+              ]}
+            />
+            <p class="text-center font-display text-xs font-bold">{site.name}</p>
+            <div class="glass mt-4 rounded-2xl p-4">
+              <p class="font-display text-[0.7rem] font-bold tracking-widest text-white/80 uppercase">
+                {angle.label}
+              </p>
+              <h3 class="mt-1 text-lg leading-snug font-extrabold">{angle.title}</h3>
+            </div>
+            <ImageSlot
+              src={angle.image}
+              alt={`Contoh render ${angle.label}`}
+              tone={i === 1 ? 'blue' : 'orange'}
+              class="mt-4 flex-1 rounded-2xl"
+            />
+            <p class="mt-4 text-sm leading-relaxed text-white/85">{angle.description}</p>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>

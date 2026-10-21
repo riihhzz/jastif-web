@@ -1,0 +1,32 @@
+---
+/**
+ * Blob gradien blur seperti latar feed Instagram Jastif.id.
+ * `speed` dibaca oleh parallax.ts: nilai positif bergerak lebih lambat dari scroll.
+ */
+interface Props {
+  color: 'orange' | 'blue' | 'sky';
+  class?: string;
+  speed?: number;
+}
+
+const { color, class: className, speed = 0.2 } = Astro.props;
+
+const colors = {
+  orange: 'from-brand-orange-400 to-brand-orange-600',
+  blue: 'from-brand-blue-500 to-brand-blue-700',
+  sky: 'from-brand-blue-300 to-brand-blue-500',
+};
+---
+
+<div
+  aria-hidden="true"
+  data-speed={speed}
+  class:list={['pointer-events-none absolute will-change-transform', className]}
+>
+  <div
+    class:list={[
+      'animate-float size-full rounded-[42%_58%_63%_37%/45%_40%_60%_55%] bg-gradient-to-br blur-2xl',
+      colors[color],
+    ]}
+  ></div>
+</div>

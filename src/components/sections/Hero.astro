@@ -1,0 +1,112 @@
+---
+import Blob from '@/components/ui/Blob.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { defaultMessage, waLink } from '@/scripts/utils/whatsapp';
+
+const chips = ['3D Modelling', 'Rendering', 'Visual Produk'];
+---
+
+<!--
+  Section transparan: warna latar & model 3D berasal dari lapisan "world" di BaseLayout.
+  Blob memakai -z-20 agar berada di antara warna latar (-z-30) dan kanvas 3D (-z-10).
+-->
+<section
+  id="hero"
+  data-bg="#2b95ff"
+  class="relative flex min-h-svh items-center overflow-clip pt-28 pb-16 lg:pt-24"
+>
+  <!-- Lapisan parallax: tiap blob bergerak dengan kecepatan berbeda -->
+  <Blob
+    color="orange"
+    speed={0.45}
+    class="-top-32 -left-44 -z-20 size-[20rem] sm:-top-24 sm:-left-32 sm:size-[34rem]"
+  />
+  <Blob
+    color="orange"
+    speed={0.25}
+    class="top-[55%] -right-52 -z-20 size-[22rem] sm:top-1/3 sm:-right-40 sm:size-[38rem]"
+  />
+  <Blob color="sky" speed={0.6} class="-bottom-40 left-1/4 -z-20 size-[30rem] opacity-80" />
+
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_center,rgb(255_255_255/0.12)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:linear-gradient(to_bottom,black,transparent)]"
+  ></div>
+
+  <div class="container-page relative grid items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
+    <div class="glass relative z-10 rounded-[2rem] p-7 sm:p-10" data-hero-copy>
+      <p class="mb-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-1.5 font-display text-xs font-bold">
+        <Icon name="cube" class="size-4 text-brand-orange-300" />
+        Jasa Visual Produk 3D untuk UMKM
+      </p>
+      <h1
+        class="text-[2.6rem] leading-[1.05] font-extrabold sm:text-6xl xl:text-[4.25rem]"
+        data-split
+      >
+        Solusi Visual Konten Promosi <span class="text-accent">Digital</span>
+      </h1>
+      <p class="mt-6 max-w-lg font-display text-base leading-relaxed font-semibold text-white/85 sm:text-lg">
+        Dari desain promosi, video iklan, hingga render 3D. Kami siap mewujudkan visual produk
+        terbaik untuk brand Anda, tanpa studio foto.
+      </p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <Button href={waLink(defaultMessage)} external size="lg">
+          <Icon name="whatsapp" />
+          Pesan Sekarang
+        </Button>
+        <Button href="#konsep" variant="glass" size="lg">
+          Lihat Cara Kerja
+          <Icon name="arrow" class="size-4 transition group-hover:translate-x-1" />
+        </Button>
+      </div>
+      <ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-white/80">
+        {chips.map((chip) => (
+          <li class="flex items-center gap-2">
+            <span class="size-1.5 rounded-full bg-brand-orange-400" />
+            {chip}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!--
+      Panggung 3D: model logo di world canvas mengikuti posisi & ukuran elemen ini.
+      Fallback: logo statis jika WebGL/JS tidak tersedia.
+    -->
+    <div class="relative aspect-square max-h-[80svh] w-full" data-hero-stage>
+      <img
+        id="hero-fallback"
+        src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/brand/logo-512.png`}
+        alt=""
+        width="512"
+        height="512"
+        class="animate-float absolute inset-0 m-auto w-3/5 drop-shadow-2xl transition-opacity duration-700"
+      />
+      <div
+        class="glass absolute bottom-6 left-0 hidden rounded-2xl px-4 py-3 text-xs sm:block lg:-left-6"
+        data-speed="-0.15"
+      >
+        <p class="font-display font-bold">Geser & scroll</p>
+        <p class="text-white/70">Model 3D ikut berputar</p>
+      </div>
+      <div
+        class="absolute top-6 right-0 hidden rounded-2xl bg-brand-orange-500 px-4 py-3 shadow-xl shadow-brand-orange-600/30 sm:block"
+        data-speed="0.12"
+      >
+        <p class="font-display text-xs font-semibold text-white/85">Mulai dari</p>
+        <p class="font-display text-xl font-extrabold">Rp35.000</p>
+      </div>
+    </div>
+  </div>
+
+  <a
+    href="#konsep"
+    class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs font-semibold text-white/70 lg:flex"
+    aria-label="Gulir ke bawah"
+  >
+    <span class="h-10 w-6 rounded-full border-2 border-white/50 p-1">
+      <span class="block h-2 w-full animate-bounce rounded-full bg-white"></span>
+    </span>
+  </a>
+</section>

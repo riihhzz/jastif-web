@@ -1,0 +1,33 @@
+---
+import Sticker from '@/components/ui/Sticker.astro';
+
+// Teks dibagi per kata oleh scroll-scenes.ts; kata di dalam <strong> diberi warna sorotan.
+---
+
+<!--
+  Chapter transparan: latar world berubah menjadi oranye dan kubus-kubus 3D mengalir
+  di belakang teks. Kata demi kata menebal mengikuti scroll.
+-->
+<Sticker
+  id="manifesto"
+  length={320}
+  bg="#ff7a1a"
+  data-manifesto
+  trackClass="flex items-center py-24 motion-on:py-0"
+>
+  <div class="container-page">
+    <p class="mb-8 inline-flex items-center gap-2 font-display text-xs font-bold tracking-[0.2em] text-ink/70 uppercase">
+      <span class="size-2 rounded-sm bg-white"></span>
+      Manifesto Kami
+    </p>
+    <p
+      class="max-w-5xl font-display text-[1.75rem] leading-[1.15] font-extrabold tracking-tight text-ink sm:text-5xl lg:text-[3.6rem]"
+      data-manifesto-text
+    >
+      Kami percaya setiap produk UMKM layak tampil{' '}
+      <strong class="text-white">sekelas brand besar.</strong> Lewat teknologi 3D, satu produkmu
+      menjadi <strong class="text-white">aset digital</strong> yang bisa diolah menjadi foto, video,
+      dan konten promosi tanpa batas. <strong class="text-white">Tanpa studio. Tanpa ribet.</strong>
+    </p>
+  </div>
+</Sticker>

@@ -1,0 +1,31 @@
+---
+/**
+ * Section "sticker": wrapper setinggi `length` (dalam lvh) dengan isi yang menempel (sticky)
+ * selama wrapper discroll. Animasi di dalamnya dikendalikan progress scroll wrapper.
+ * Tanpa motion (reduce motion / tanpa JS) tampil sebagai section biasa.
+ */
+interface Props {
+  id?: string;
+  length?: number;
+  class?: string;
+  trackClass?: string;
+  /** Warna latar "world" saat section ini aktif (untuk section transparan). */
+  bg?: string;
+  [key: `data-${string}`]: string | boolean | undefined;
+}
+
+const { id, length = 300, class: className, trackClass, bg, ...rest } = Astro.props;
+---
+
+<section
+  id={id}
+  data-sticker
+  data-bg={bg}
+  class:list={['sticker relative', className]}
+  style={`--len: ${length}lvh`}
+  {...rest}
+>
+  <div class:list={['sticker-track', trackClass]}>
+    <slot />
+  </div>
+</section>

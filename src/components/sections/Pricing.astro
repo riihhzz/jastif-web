@@ -1,0 +1,90 @@
+---
+import Blob from '@/components/ui/Blob.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { packages } from '@/data/services';
+---
+
+<section id="harga" class="relative isolate overflow-hidden bg-brand-blue-500 py-24 lg:py-32">
+  <Blob color="orange" speed={0.4} class="-top-32 -right-24 size-[32rem] opacity-80" />
+  <Blob color="sky" speed={0.2} class="bottom-0 -left-32 size-[28rem] opacity-60" />
+
+  <div class="container-page">
+    <SectionHeading eyebrow="Paket & Harga" align="center">
+      Harga Ramah <span class="text-accent">UMKM</span>
+      <Fragment slot="description">
+        Mulai dari paket sederhana. Layanan lain sedang kami siapkan berdasarkan masukan pelanggan.
+      </Fragment>
+    </SectionHeading>
+
+    <div class="mt-14 grid items-stretch gap-6 lg:grid-cols-3">
+      {packages.map((pkg) => (
+        <article
+          data-reveal
+          class:list={[
+            'relative flex flex-col rounded-[1.75rem] p-8',
+            pkg.highlight
+              ? 'bg-white text-ink shadow-2xl shadow-brand-blue-900/30 lg:-my-4 lg:py-12'
+              : 'glass',
+          ]}
+        >
+          {pkg.highlight && (
+            <span class="absolute -top-3.5 left-8 rounded-full bg-brand-orange-500 px-3.5 py-1 font-display text-xs font-bold text-white">
+              Paling Populer
+            </span>
+          )}
+          <h3 class="text-xl font-extrabold">{pkg.name}</h3>
+          <p class:list={['mt-2 text-sm', pkg.highlight ? 'text-ink/60' : 'text-white/70']}>
+            {pkg.description}
+          </p>
+          <p class="mt-6">
+            {pkg.priceNote && (
+              <span
+                class:list={[
+                  'block text-xs font-bold uppercase',
+                  pkg.highlight ? 'text-ink/50' : 'text-white/60',
+                ]}
+              >
+                {pkg.priceNote}
+              </span>
+            )}
+            <span
+              class:list={[
+                'font-display font-extrabold',
+                pkg.available ? 'text-4xl' : 'text-2xl text-white/80',
+              ]}
+            >
+              {pkg.price}
+            </span>
+          </p>
+          <ul class="mt-6 mb-8 space-y-3 text-sm">
+            {pkg.features.map((f) => (
+              <li class="flex items-start gap-3">
+                <span
+                  class:list={[
+                    'mt-0.5 grid size-5 shrink-0 place-items-center rounded-full',
+                    pkg.highlight ? 'bg-brand-blue-600 text-white' : 'bg-white/20',
+                  ]}
+                >
+                  <Icon name="check" class="size-3" />
+                </span>
+                {f}
+              </li>
+            ))}
+          </ul>
+          {pkg.available ? (
+            <Button href="#pesan" size="lg" class="mt-auto">
+              Pesan Paket Ini
+              <Icon name="arrow" class="size-4" />
+            </Button>
+          ) : (
+            <span class="mt-auto rounded-full border border-white/30 py-3.5 text-center font-display text-sm font-bold text-white/70">
+              Segera Hadir
+            </span>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

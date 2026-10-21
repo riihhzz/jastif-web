@@ -1,0 +1,80 @@
+---
+/**
+ * Menampilkan gambar render jika `src` diisi, atau placeholder bergaya brand jika belum ada.
+ * `src` adalah path relatif di /public, mis. 'images/portfolio/segarku.webp'.
+ */
+interface Props {
+  src?: string;
+  alt: string;
+  label?: string;
+  tone?: 'blue' | 'orange' | 'light';
+  /** Posisi label placeholder; 'left'/'right' dipakai di slider before/after. */
+  labelAlign?: 'center' | 'left' | 'right';
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+const {
+  src,
+  alt,
+  label,
+  tone = 'blue',
+  labelAlign = 'center',
+  class: className,
+  loading = 'lazy',
+} = Astro.props;
+
+const aligns = { center: '', left: 'pr-[50%]', right: 'pl-[50%]' };
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const tones = {
+  blue: 'from-brand-blue-400 via-brand-blue-600 to-brand-blue-900 text-white/80',
+  orange: 'from-brand-orange-300 via-brand-orange-500 to-brand-orange-600 text-white/85',
+  light: 'from-brand-blue-50 via-white to-brand-blue-100 text-ink/50',
+};
+---
+
+<div
+  class:list={['overflow-hidden', !/\babsolute\b/.test(className ?? '') && 'relative', className]}
+>
+  {src ? (
+    <img
+      src={`${base}/${src}`}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      class="size-full object-cover"
+    />
+  ) : (
+    <div
+      role="img"
+      aria-label={`${alt} (render segera hadir)`}
+      class:list={[
+        'grid size-full place-items-center bg-gradient-to-br',
+        tones[tone],
+        aligns[labelAlign],
+      ]}
+    >
+      <div class="flex flex-col items-center gap-3 p-6 text-center">
+        <svg viewBox="0 0 48 48" class="size-12 opacity-70" fill="none" aria-hidden="true">
+          <path
+            d="M24 4 42 14v20L24 44 6 34V14L24 4Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M6 14l18 10 18-10M24 24v20"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span class="font-display text-xs font-bold tracking-widest uppercase">
+          {label ?? 'Render segera hadir'}
+        </span>
+      </div>
+    </div>
+  )}
+  <slot />
+</div>

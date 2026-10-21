@@ -1,0 +1,22 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Blob from '@/components/ui/Blob.astro';
+import Button from '@/components/ui/Button.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Halaman tidak ditemukan — Jastif.id">
+  <section class="relative isolate grid min-h-svh place-items-center overflow-hidden bg-brand-blue-500 px-5 text-center">
+    <Blob color="orange" class="-top-20 -left-20 size-96 opacity-90" />
+    <Blob color="orange" class="-right-20 -bottom-20 size-96 opacity-70" />
+    <div class="glass rounded-[2rem] p-10 sm:p-14">
+      <p class="font-display text-8xl font-black">404</p>
+      <h1 class="mt-4 text-2xl font-extrabold">Halaman tidak ditemukan</h1>
+      <p class="mt-2 text-white/80">Sepertinya halaman ini belum di-render.</p>
+      <Button href={base} size="lg" class="mt-8">
+        Kembali ke Beranda
+      </Button>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,41 @@
+---
+interface Props {
+  eyebrow: string;
+  align?: 'left' | 'center';
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { eyebrow, align = 'left', tone = 'light', class: className } = Astro.props;
+---
+
+<div data-reveal class:list={['max-w-2xl', align === 'center' && 'mx-auto text-center', className]}>
+  <p
+    class:list={[
+      'mb-4 inline-flex items-center gap-2 font-display text-xs font-bold tracking-[0.2em] uppercase',
+      tone === 'light' ? 'text-brand-blue-100' : 'text-brand-blue-600',
+    ]}
+  >
+    <span class="size-2 rounded-sm bg-brand-orange-500"></span>
+    {eyebrow}
+  </p>
+  <h2
+    data-split="scroll"
+    class:list={[
+      'text-3xl leading-[1.1] font-extrabold sm:text-4xl lg:text-5xl',
+      tone === 'light' ? 'text-white' : 'text-ink',
+    ]}
+  >
+    <slot />
+  </h2>
+  {Astro.slots.has('description') && (
+    <p
+      class:list={[
+        'mt-5 text-base leading-relaxed sm:text-lg',
+        tone === 'light' ? 'text-white/75' : 'text-ink/65',
+      ]}
+    >
+      <slot name="description" />
+    </p>
+  )}
+</div>

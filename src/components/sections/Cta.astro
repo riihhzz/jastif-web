@@ -1,0 +1,42 @@
+---
+import Blob from '@/components/ui/Blob.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { site } from '@/data/site';
+import { defaultMessage, waLink } from '@/scripts/utils/whatsapp';
+---
+
+<section class="relative bg-white px-4 pb-24 sm:px-8 lg:pb-32">
+  <div
+    data-reveal
+    class="relative isolate mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-brand-blue-500 px-6 py-20 text-center sm:px-12 lg:py-28"
+  >
+    <Blob color="orange" speed={0.15} class="-top-24 -left-24 size-96 opacity-90" />
+    <Blob color="orange" speed={-0.1} class="-right-20 -bottom-32 size-[26rem] opacity-80" />
+
+    <h2 class="text-mega text-[clamp(3.25rem,10vw,9rem)]" data-lines>
+      <span class="block overflow-clip">
+        <span class="block" data-line>
+          Siap bikin produkmu
+        </span>
+      </span>
+      <span class="block overflow-clip text-brand-blue-950">
+        <span class="block" data-line>
+          tampil beda?
+        </span>
+      </span>
+    </h2>
+    <p class="mx-auto mt-6 max-w-xl text-lg text-white/85">
+      Konsultasi gratis. Ceritakan produkmu dan kami bantu wujudkan visual 3D-nya.
+    </p>
+    <div class="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+      <Button href={waLink(defaultMessage)} external size="lg">
+        <Icon name="whatsapp" />
+        {site.whatsapp.display}
+      </Button>
+      <Button href={site.instagram.url} external variant="glass" size="lg">
+        <Icon name="instagram" />@{site.instagram.handle}
+      </Button>
+    </div>
+  </div>
+</section>
