@@ -16,7 +16,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       class="mt-3 flex items-center justify-between gap-4 rounded-full px-3 py-2 transition-all duration-500 ease-out-expo in-data-[scrolled]:glass in-data-[scrolled]:bg-brand-blue-950/80 sm:px-4"
       aria-label="Navigasi utama"
     >
-      <a href={`${base}/`} class="flex items-center gap-2.5" aria-label={`${site.name} beranda`}>
+      <a
+        href={`${base}/`}
+        class="flex min-w-0 items-center gap-2.5"
+        aria-label={`${site.name} beranda`}
+      >
         <img
           src={`${base}/images/brand/logo-mark.png`}
           alt=""
@@ -40,11 +44,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         ))}
       </ul>
 
-      <div class="flex items-center gap-2">
-        <Button href={waLink(defaultMessage)} external class="hidden sm:inline-flex">
-          <Icon name="whatsapp" class="size-4" />
-          Konsultasi
-        </Button>
+      <div class="flex shrink-0 items-center gap-2">
+        <!-- Layar ≥640px: tombol berteks. Dibungkus agar `hidden` tidak kalah oleh inline-flex Button. -->
+        <div class="hidden sm:block">
+          <Button href={waLink(defaultMessage)} external>
+            <Icon name="whatsapp" class="size-4" />
+            Konsultasi
+          </Button>
+        </div>
+        <!-- HP: ikon WhatsApp bulat saja agar tidak berdesakan dengan logo -->
+        <a
+          href={waLink(defaultMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Konsultasi via WhatsApp"
+          class="grid size-11 place-items-center rounded-full bg-brand-orange-500 shadow-lg shadow-brand-orange-500/30 transition hover:bg-brand-orange-600 sm:hidden"
+        >
+          <Icon name="whatsapp" class="size-5" />
+        </a>
         <button
           id="menu-toggle"
           type="button"
