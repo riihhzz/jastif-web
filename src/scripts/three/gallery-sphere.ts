@@ -103,16 +103,21 @@ export async function createGallerySphere(
 
   // ---------- Tekstur ----------
   await document.fonts?.load('64px Anton').catch(() => undefined);
-  let textures: THREE.Texture[];
-  if (images.length) {
-    const loader = new THREE.TextureLoader();
-    textures = images.map((src) => {
-      const tex = loader.load(asset(src));
-      tex.colorSpace = THREE.SRGBColorSpace;
-      return tex;
-    });
-  } else {
-    textures = labels.map((label, i) => placeholderTexture(label, i));
+  // Foto asli + placeholder; tiap foto asli menggantikan satu placeholder
+  const loader = new THREE.TextureLoader();
+  const photos = images.map((src) => {
+    const tex = loader.load(asset(src));
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  });
+  const placeholders = labels
+    .slice(0, Math.max(0, labels.length - images.length))
+    .map((label, i) => placeholderTexture(label, i));
+  // Selang-seling agar foto asli tersebar merata di permukaan bola
+  const textures: THREE.Texture[] = [];
+  for (let i = 0; i < Math.max(photos.length, placeholders.length); i++) {
+    if (photos[i]) textures.push(photos[i]!);
+    if (placeholders[i]) textures.push(placeholders[i]!);
   }
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
   textures.forEach((t) => (t.anisotropy = Math.min(8, maxAniso)));

@@ -57,6 +57,7 @@ export const angles: Angle[] = [
     label: 'Promotional Shot',
     title: 'Visual Promosi yang Menarik Perhatian',
     description: 'Lengkap dengan elemen pendukung seperti es, percikan air, atau properti.',
+    image: 'images/portfolio/parfum-promo.webp',
   },
 ];
 

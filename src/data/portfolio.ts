@@ -1,4 +1,4 @@
-export type Category = 'Minuman' | 'Makanan' | 'Skincare' | 'Retail';
+export type Category = 'Parfum' | 'Minuman' | 'Makanan' | 'Skincare' | 'Retail';
 
 export interface PortfolioItem {
   title: string;
@@ -7,12 +7,16 @@ export interface PortfolioItem {
   image?: string;
 }
 
-export const categories: Category[] = ['Minuman', 'Makanan', 'Skincare', 'Retail'];
+export const categories: Category[] = ['Parfum', 'Minuman', 'Makanan', 'Skincare', 'Retail'];
 
 // Ganti / tambah item setelah render siap. Item tanpa `image` tampil sebagai placeholder.
 export const portfolio: PortfolioItem[] = [
+  {
+    title: 'Parfum — Promo Shot',
+    category: 'Parfum',
+    image: 'images/portfolio/parfum-promo.webp',
+  },
   { title: 'SegarKu — Front View', category: 'Minuman' },
-  { title: 'SegarKu — Perspective', category: 'Minuman' },
   { title: 'SegarKu — Splash Promo', category: 'Minuman' },
   { title: 'Keripik Kemasan', category: 'Makanan' },
   { title: 'Serum Botol Kaca', category: 'Skincare' },

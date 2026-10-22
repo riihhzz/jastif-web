@@ -1,7 +1,8 @@
 // Foto yang ditempel di bola galeri 3D (section setelah Portofolio).
 // Isi dengan path di /public, mis. 'images/gallery/segarku-01.webp' (rasio ±16:10, lebar ±640 px).
-// Selama kosong, tile memakai placeholder bergaya brand dengan label di bawah.
-export const galleryImages: string[] = [];
+// Foto asli dicampur dengan placeholder bergaya brand (label di bawah) agar bola tetap bervariasi;
+// semakin banyak foto asli, semakin sedikit placeholder yang tampil.
+export const galleryImages: string[] = ['images/gallery/parfum-promo.webp'];
 
 export const galleryPlaceholderLabels = [
   'SegarKu',
